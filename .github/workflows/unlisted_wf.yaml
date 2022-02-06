@@ -12,7 +12,18 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'}} 
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ github.event }}
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            const [owner, repo] = '${{ env.GITHUB_REPOSITORY }}'.split("/")
+            github.rest.repos.createCommitStatus({
+              owner: owner,
+              repo: repo,
+              sha: '${{ github.event.workflow_run.head_sha}}',
+              state: 'success',
+              target_url: 'assignUser.github.io',
+              description: 'Results commented!'
+            })
   on-failure:
     needs: on-success
     if: ${{ (github.event.workflow_run.conclusion == 'failure' || failure()) && github.event.workflow_run.event == 'pull_request'}} 
@@ -21,7 +32,7 @@ jobs:
       - uses: actions/github-script@v5
         with:
           script: |
-            const [owner, repo] = ${{ env.GITHUB_REPOSITORY }}.split("/")
+            const [owner, repo] = '${{ env.GITHUB_REPOSITORY }}'.split("/")
             github.rest.repos.createCommitStatus({
               owner: owner,
               repo: repo,
