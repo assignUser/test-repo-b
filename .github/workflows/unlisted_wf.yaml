@@ -21,7 +21,7 @@ jobs:
               repo: repo,
               sha: '${{ github.event.workflow_run.head_sha}}',
               state: 'success',
-              target_url: 'assignUser.github.io',
+              target_url: '${{ github.event.workflow_run.html_url }}',
               description: 'Results commented!'
             })
   on-failure:
@@ -38,6 +38,6 @@ jobs:
               repo: repo,
               sha: '${{ github.event.workflow_run.head_sha}}',
               state: 'failure',
-              target_url: 'assignUser.github.io',
+              target_url: '${{ github.event.workflow_run.html_url }}',
               description: 'Workflow failed!'
             })
