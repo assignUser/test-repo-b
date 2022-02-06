@@ -1,0 +1,14 @@
+name: Unlisted Test
+
+
+on:
+  workflow_run:
+    workflows: ["fails", "succeeds"]
+    types:
+      - completed
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.event }}
