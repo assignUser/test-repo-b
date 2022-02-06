@@ -22,7 +22,8 @@ jobs:
               sha: '${{ github.event.workflow_run.head_sha}}',
               state: 'success',
               target_url: '${{ github.event.workflow_run.html_url }}',
-              description: 'Results commented!'
+              description: 'Results commented!',
+              context: 'touchstone comment'
             })
   on-failure:
     needs: on-success
@@ -39,5 +40,6 @@ jobs:
               sha: '${{ github.event.workflow_run.head_sha}}',
               state: 'failure',
               target_url: '${{ github.event.workflow_run.html_url }}',
-              description: 'Workflow failed!'
+              description: 'Workflow failed!',
+              context: 'touchstone comment'
             })
