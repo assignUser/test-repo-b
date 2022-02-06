@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo $GITHUB_REF
-      - uses: action/github-script@v5
+      - uses: actions/github-script@v5
         with:
           script: |
             const [owner. repo] = ${{ env.GITHUB_REPOSITORY }}.split("/")
