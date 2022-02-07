@@ -10,7 +10,7 @@ jobs:
       - uses: actions/github-script@v5
         with:
           script: |
-            let res = await github.rest.issues.get({
+            let res = await github.request("GET /repos/{owner}/{repo}/issues", {
             owner: context.repo.owner,
             repo: context.repo.repo})
             console.log(res)
