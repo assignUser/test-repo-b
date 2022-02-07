@@ -7,12 +7,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "::stop-commands::206432e0a1bd1"
-          echo "::warning ::not parsed"
-          echo "::206432e0a1bd1::"
-          echo "::warning :: Ok parsing again"
-          
-          echo "::stop-commands::206432e0a1bd"
-          echo "::error :: Still processing because token ends on letter?!"
-          echo "::206432e0a1bd::"
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            let res = await github.rest.issues.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo})
+            console.log(res)
