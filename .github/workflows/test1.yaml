@@ -22,7 +22,9 @@ jobs:
           rm -f DESCRIPTION.bak
           make sync-cpp
           R CMD build --no-build-vignettes .
+          Rscript -e "install.packages('arrow')"
       - shell: Rscript {0}
+        if: true
         env:
           NOT_CRAN: "TRUE"
           ARROW_R_DEV: "TRUE"
