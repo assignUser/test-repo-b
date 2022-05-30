@@ -26,13 +26,18 @@ jobs:
           make sync-cpp
           R CMD build --no-build-vignettes .
           Rscript -e "install.packages('arrow')"
+      - name: Set dev repo
+        shell: bash
+        run: |
+          # It is important to use pwd here as this happens inside a container so the 
+          # normal github.workspace path is wrong.
+          echo "options(arrow.dev_repo ='https://nightly.wujciak.de/r')" >> ~/.Rprofile
       - shell: Rscript {0}
         if: true
         env:
           NOT_CRAN: "TRUE"
           ARROW_R_DEV: "TRUE"
         run: |
-          options(arrow.dev_repo = "https://nightly.wujciak.de/r")
           install.packages("arrow/r/arrow_8.0.0.tar.gz")
           library(arrow)
           read_parquet(system.file("v0.7.1.parquet", package = "arrow"))
