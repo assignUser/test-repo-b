@@ -1,12 +1,17 @@
-name: succeeds
+name: test
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
   
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - id: test
+        run: |
+          touch test.txt
+          echo "::set-output path=__some__thing"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: r-pkg${{ steps.test.outputs.path }}
+          path: test.txt
