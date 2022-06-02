@@ -10,7 +10,7 @@ jobs:
       - id: test
         run: |
           touch test.txt
-          echo "::set-output path=__some__thing"
+          echo "::set-output name=path::__some__thing"
       - uses: actions/upload-artifact@v3
         with:
           name: r-pkg${{ steps.test.outputs.path }}
