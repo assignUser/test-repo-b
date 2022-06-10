@@ -12,7 +12,19 @@ jobs:
       matrix:
         not-cran: ["TRUE", "FALSE"]
     steps:
-      - run: dnf install -y libcurl-devel openssl-devel
+      - name: Install system requirements
+        shell: bash
+        run: |
+          if [ "`which dnf`" ]; then
+            dnf install -y libcurl-devel openssl-devel
+          elif [ "`which yum`" ]; then
+            yum install -y libcurl-devel openssl-devel
+          elif [ "`which zypper`" ]; then
+            zypper install -y libcurl-devel libopenssl-devel
+          else
+            apt-get update
+            apt-get install -y libcurl4-openssl-dev libssl-dev
+          fi
       - name: Test linux binary
         env:
           NOT_CRAN: ${{ matrix.not-cran }}
