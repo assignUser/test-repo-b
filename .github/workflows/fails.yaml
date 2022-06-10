@@ -1,12 +1,27 @@
-name: fails
+name: Centos-7 test
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
   
 jobs:
-  test:
+  install:
     runs-on: ubuntu-latest
+    container: "rstudio/r-base:4.2-centos7"
+    strategy:
+      fail-fast: false
+      matrix:
+        not-cran: ["TRUE", "FALSE"]
     steps:
-      - run: exit 1
+      - run: dnf install -y libcurl-devel openssl-devel
+      - name: Test linux binary
+        env:
+          NOT_CRAN: ${{ matrix.not-cran }}
+        shell: Rscript {0}
+        run: |        
+          install.packages(
+            "arrow",
+            verbose = TRUE
+          )
+
+          library(arrow)
+          read_parquet(system.file("v0.7.1.parquet", package = "arrow"))
