@@ -6,11 +6,6 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    container: "rstudio/r-base:4.1-centos7"
-    strategy:
-      fail-fast: false
-      matrix:
-        not-cran: ["TRUE", "FALSE"]
     steps:
       - name: Install system requirements
         shell: bash
