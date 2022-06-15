@@ -19,6 +19,8 @@ jobs:
         with:
           repository: apache/arrow
       - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: 'r'
 
   install-devel:
     runs-on: windows-latest
@@ -30,4 +32,5 @@ jobs:
         with:
           repository: apache/arrow
       - uses: r-lib/actions/setup-r-dependencies@v2
-
+        with:
+          working-directory: 'r'
