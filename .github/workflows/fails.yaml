@@ -5,12 +5,13 @@ on:
   
 jobs:
   install:
-    runs-on: macos-latest
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         rspm: [true, false]
+    runs-on: ubuntu-latest
     steps:
-      - uses: assignUser/actions/setup-r@pin-mac-4.2.0
-        with:
-          r-version: 4.2
+      - run: |
+          source agent-start "$GITHUB_ACTION"
+          set -eu
+          mkdir a
+          mkdir b
+          touch a/test.txt
+          cp a/* b/
+        
