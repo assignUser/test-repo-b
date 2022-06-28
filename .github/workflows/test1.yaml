@@ -4,40 +4,76 @@ on:
   workflow_dispatch:
   
 jobs:
-  test:
-    runs-on: ubuntu-22.04
+  ubuntu:
+    name: AMD64 Ubuntu ${{ matrix.ubuntu }} R ${{ matrix.r }} Force-Tests ${{ matrix.force-tests }}
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.title, 'WIP') }}
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        r: ["4.2"]
+        ubuntu: [20.04]
+    env:
+      R: ${{ matrix.r }}
+      UBUNTU: ${{ matrix.ubuntu }}
     steps:
-      - run: sudo apt install libcurl4-openssl-dev
-      - uses: r-lib/actions/setup-r@v2
-      - uses: actions/checkout@v3
+      - name: Checkout Arrow
+        uses: actions/checkout@v3
         with:
-          repository: apache/arrow
-          path: arrow
-      - run: |
-          cd arrow/r
-          sed -i.bak -E -e \
-            's/(^Version: )([0-9]+\.[0-9]+\.[0-9]+).*$/\18.0.0/' \
-            DESCRIPTION
-          head DESCRIPTION
-          
-          sed -i.bak -E -e 's/os <- find_available_binary\(os\)$/os <- "ubuntu-22.04"/' tools/nixlibs.R
-          rm -f tools/nixlibs.R.bak
-          rm -f DESCRIPTION.bak
-          make sync-cpp
-          R CMD build --no-build-vignettes .
-          Rscript -e "install.packages('arrow')"
-      - name: Set dev repo
-        shell: bash
+          fetch-depth: 0
+      - name: Cache Docker Volumes
+        uses: actions/cache@v2
+        with:
+          path: .docker
+          # As this key is identical on both matrix builds only one will be able to successfully cache,
+          # this is fine as there are no differences in the build
+          key: ubuntu-${{ matrix.ubuntu }}-r-${{ matrix.r }}-${{ hashFiles('cpp/src/**/*.cc','cpp/src/**/*.h)') }}-${{ github.run_id }}
+          restore-keys: |
+            ubuntu-${{ matrix.ubuntu }}-r-${{ matrix.r }}-${{ hashFiles('cpp/src/**/*.cc','cpp/src/**/*.h)') }}-
+            ubuntu-${{ matrix.ubuntu }}-r-${{ matrix.r }}-
+      - name: Check pkgdown reference sections
+        run: ci/scripts/r_pkgdown_check.sh
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Setup Archery
+        run: pip install -e dev/archery[docker]
+      - name: Execute Docker Build
         run: |
-          # It is important to use pwd here as this happens inside a container so the 
-          # normal github.workspace path is wrong.
-          echo "options(arrow.dev_repo ='https://nightly.wujciak.de/r')" >> ~/.Rprofile
-      - shell: Rscript {0}
-        if: true
-        env:
-          NOT_CRAN: "TRUE"
-          ARROW_R_DEV: "TRUE"
+          sudo sysctl -w kernel.core_pattern="core.%e.%p"
+          ulimit -c unlimited
+          # Setting a non-default and non-probable Marquesas French Polynesia time
+          # it has both with a .45 offset and very very few people who live there.
+          archery docker run -e TZ=MART -e ARROW_R_FORCE_TESTS=false ubuntu-r
+      - name: Dump install logs
+        run: cat r/check/arrow.Rcheck/00install.out
+        if: always()
+      - name: Dump test logs
+        run: cat r/check/arrow.Rcheck/tests/testthat.Rout*
+        if: always()
+      - name: Execute Docker Build
+        if: always()
         run: |
-          install.packages("arrow/r/arrow_8.0.0.tar.gz")
-          library(arrow)
-          read_parquet(system.file("v0.7.1.parquet", package = "arrow"))
+          sudo sysctl -w kernel.core_pattern="core.%e.%p"
+          ulimit -c unlimited
+          # Setting a non-default and non-probable Marquesas French Polynesia time
+          # it has both with a .45 offset and very very few people who live there.
+          archery docker run -e TZ=MART -e ARROW_R_FORCE_TESTS=false ubuntu-r
+      - name: Dump install logs
+        run: cat r/check/arrow.Rcheck/00install.out
+        if: always()
+      - name: Dump test logs
+        run: cat r/check/arrow.Rcheck/tests/testthat.Rout*
+        if: always()
+      - name: Save the test output
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-output
+          path: r/check/arrow.Rcheck/tests/testthat.Rout*
+      - name: Docker Push
+        if: success() && github.event_name == 'push' && github.repository == 'apache/arrow'
+        continue-on-error: true
+        run: archery docker push ubuntu-r
