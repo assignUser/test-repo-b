@@ -5,13 +5,13 @@ on:
   
 jobs:
   install:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - run: |
-          source agent-start "$GITHUB_ACTION"
-          set -eu
-          mkdir a
-          mkdir b
-          touch a/test.txt
-          cp a/* b/
-      - run: echo another step
+      - run: which(ccache)
+      - run: echo $PATH
+      - uses: r-lib/actions/setup-r@v2
+      - run: which(ccache)
+      - run: echo $PATH
