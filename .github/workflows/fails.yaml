@@ -23,6 +23,6 @@ jobs:
 
           cat("Remove old arrow version.\n")
           remove.packages("arrow")
-          install.packages("arrow", type = "source", repos = "https://nightlies.apache.org/arrow/r")
+          install.packages("https://arrow-r-nightly.s3.amazonaws.com/src/contrib/arrow_7.0.0.20220401.tar.gz")
           
           print(packageVersion("arrow"))
