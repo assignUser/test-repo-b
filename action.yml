@@ -5,7 +5,7 @@ inputs:
   default_secret:
     decription: 'Check if default values can access secret context'
     required: false
-    default: ${{ secrets.top_secret }}
+    default: ${{ secrets.TOP_SECRET }}
   explicit_secret:
     decription: 'Explicitly passed secrets work'
     required: true
