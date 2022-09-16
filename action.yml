@@ -16,6 +16,7 @@ runs:
     - env:
         default: ${{ inputs.default_secret }}
         explicit: ${{ inputs.exxplicit_secret }}
+      shell: bash
       run: |
         if [ ! -z "$default" ]; then
           echo "Default secret passed: $default"
