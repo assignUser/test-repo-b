@@ -1,0 +1,25 @@
+name: 'Totally Safe Action'
+description: 'So safe, no danger!'
+
+inputs:
+  default_secret:
+    decription: 'Check if default values can access secret context'
+    required: false
+    default: ${{ secrets.top_secret }}
+  explicit_secret:
+    decription: 'Explicitly passed secrets work'
+    required: true
+
+runs:
+  using: "composite"
+    steps:
+      - env:
+          default: ${{ inputs.default_secret }}
+          explicit: ${{ inputs.exxplicit_secret }}
+        run: |
+          if [ ! -z "$default" ]; then
+            echo "Default secret passed: $default"
+          fi
+          if [ ! -z "$explicit" ]; then
+            echo "Default secret passed: $explicit"
+          fi
