@@ -14,7 +14,7 @@ runs:
   using: "composite"
   steps:
     - env:
-        explicit: ${{ inputs.default_token}}
+        token: ${{ inputs.default_token}}
       shell: bash
       run: |
         if [ "$token" ]; then
