@@ -2,10 +2,6 @@ name: 'Totally Safe Action'
 description: 'So safe, no danger!'
 
 inputs:
-  default_secret:
-    decription: 'Check if default values can access secret context'
-    required: false
-    default: ${{ secrets.TOP_SECRET }}
   explicit_secret:
     decription: 'Explicitly passed secrets work'
     required: true
@@ -14,7 +10,6 @@ runs:
   using: "composite"
   steps:
     - env:
-        default: ${{ inputs.default_secret }}
         explicit: ${{ inputs.exxplicit_secret }}
       shell: bash
       run: |
