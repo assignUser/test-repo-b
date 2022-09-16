@@ -10,7 +10,7 @@ runs:
   using: "composite"
   steps:
     - env:
-        explicit: ${{ inputs.exxplicit_secret }}
+        explicit: ${{ inputs.explicit_secret }}
       shell: bash
       run: |
         if [ ! -z "$default" ]; then
