@@ -2,6 +2,7 @@ name: 'Totally Safe Action'
 description: 'So safe, no danger!'
 
 inputs:
+  default_token: ${{ github.token }}
   explicit_secret:
     decription: 'Explicitly passed secrets work'
     required: true
@@ -10,12 +11,9 @@ runs:
   using: "composite"
   steps:
     - env:
-        explicit: ${{ inputs.explicit_secret }}
+        explicit: ${{ inputs.default_token}}
       shell: bash
       run: |
-        if [ ! -z "$default" ]; then
-          echo "Default secret passed: $default"
-        fi
-        if [ "$explicit" ]; then
-          echo "Default secret passed: $explicit"
+        if [ "$token" ]; then
+          echo "Default token passed: $explicit"
         fi
