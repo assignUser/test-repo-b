@@ -2,7 +2,10 @@ name: 'Totally Safe Action'
 description: 'So safe, no danger!'
 
 inputs:
-  default_token: ${{ github.token }}
+  default_token:
+    description: 'bla'
+    required: false 
+    default: ${{ github.token }}
   explicit_secret:
     decription: 'Explicitly passed secrets work'
     required: true
