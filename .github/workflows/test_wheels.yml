@@ -19,7 +19,7 @@ jobs:
       - run: python -m pip install packaging
       - shell: python {0}
         run: |
-          import packaging
+          from packaging.tags import sys_tags
           tags = sys_tags()
           for tag in list(tags)[:3]:
             print(tag.interpreter, tag.abi, tag.platform)
