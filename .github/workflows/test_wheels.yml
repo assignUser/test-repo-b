@@ -16,11 +16,15 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.7
-      - run: python -m pip install packaging
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install packaging
       - shell: python {0}
         run: |
           from packaging.tags import sys_tags
           tags = sys_tags()
+          from distutils import util
+          util.get_platform()
           for tag in list(tags)[:3]:
             print(tag.interpreter, tag.abi, tag.platform)
 
