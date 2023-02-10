@@ -10,6 +10,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/setup-python@v4
         with:
