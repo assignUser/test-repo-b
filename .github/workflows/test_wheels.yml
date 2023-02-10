@@ -19,7 +19,8 @@ jobs:
       - run: |
           gh run -R facebookincubator/velox download 4115657665
           cd wheels
-          python -m pip install  pyvelox-0.0.1a0+bba0a2e-cp37-cp37m-ma${{ startsWith(matrix.os, 'ubuntu') && 'ny*' || 'cos*' }}
+          python -V
+          python3.7 -m pip install  pyvelox-0.0.1a0+bba0a2e-cp37-cp37m-ma${{ startsWith(matrix.os, 'ubuntu') && 'ny*' || 'cos*' }}
       - name: Test Wheels
         shell: python {0}
         run: |
