@@ -24,7 +24,7 @@ jobs:
           from packaging.tags import sys_tags
           tags = sys_tags()
           from distutils import util
-          util.get_platform()
+          print(util.get_platform())
           for tag in list(tags)[:3]:
             print(tag.interpreter, tag.abi, tag.platform)
 
@@ -39,6 +39,7 @@ jobs:
           import pyvelox.version as pvv
           import pyvelox.pyvelox as pv
           print(pvv.git_version)
+          expr = pv.Expression.from_string("a + b")
           a = pv.from_list([1, 2, 3, None])
           b = pv.from_list([4, 5, None, 6])
           c = expr.evaluate(["a", "b"], [a, b])
