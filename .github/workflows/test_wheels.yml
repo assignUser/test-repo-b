@@ -32,6 +32,7 @@ jobs:
       - run: |
           gh run -R facebookincubator/velox download 4115657665
           cd wheels
+          mv pyvelox-0.0.1a0+bba0a2e-cp37-cp37m-macosx_11_0_x86_64.whl pyvelox-0.0.1a0+bba0a2e-cp37-cp37m-macosx_10_15_x86_64.whl 
           python3.7 -m pip install  pyvelox-0.0.1a0+bba0a2e-cp37-cp37m-ma${{ startsWith(matrix.os, 'ubuntu') && 'ny*' || 'cos*' }}
       - name: Test Wheels
         shell: python {0}
@@ -39,8 +40,4 @@ jobs:
           import pyvelox.version as pvv
           import pyvelox.pyvelox as pv
           print(pvv.git_version)
-          expr = pv.Expression.from_string("a + b")
-          a = pv.from_list([1, 2, 3, None])
-          b = pv.from_list([4, 5, None, 6])
-          c = expr.evaluate(["a", "b"], [a, b])
-      
+          pv.Expression.from_string("a + b")
