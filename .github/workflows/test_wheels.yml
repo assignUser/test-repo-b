@@ -14,8 +14,13 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/setup-python@v4
+        if: startsWith(matrix.os, 'ubuntu')
         with:
           python-version: 3.7
+      - if: ${{ ! startsWith(matrix.os, 'ubuntu') }}
+        run: |
+          brew install python@3.7
+          python --version
       - run: |
           python -m pip install --upgrade pip
           python -m pip install packaging
@@ -28,7 +33,7 @@ jobs:
           for tag in list(tags)[:3]:
             print(tag.interpreter, tag.abi, tag.platform)
 
-
+``
       - run: |
           gh run -R facebookincubator/velox download 4115657665
           cd wheels
