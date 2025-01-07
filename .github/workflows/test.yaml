@@ -8,7 +8,7 @@ jobs:
     name: AMD64 Ubuntu ${{ matrix.ubuntu }} R ${{ matrix.r }} Force-Tests ${{ matrix.force-tests }}
     runs-on: ubuntu-latest
     steps:
-      - uses: assignUser/action-monorepo/echo@echo_v1
+      - uses: assignUser/action-monorepo/echo@echo_v2
         with:
           message: "A message"
 
