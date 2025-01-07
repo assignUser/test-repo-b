@@ -1,6 +1,7 @@
 name: deps-test
 
 on:
+  push:
   workflow_dispatch:
   
 jobs:
@@ -8,7 +9,5 @@ jobs:
     name: AMD64 Ubuntu ${{ matrix.ubuntu }} R ${{ matrix.r }} Force-Tests ${{ matrix.force-tests }}
     runs-on: ubuntu-latest
     steps:
-      - uses: assignUser/action-monorepo/echo@echo_v2
-        with:
-          message: "A message"
+      - uses: r-lib/actions/setup-r@v2
 
