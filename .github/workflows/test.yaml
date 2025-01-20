@@ -9,5 +9,5 @@ jobs:
     name: AMD64 Ubuntu ${{ matrix.ubuntu }} R ${{ matrix.r }} Force-Tests ${{ matrix.force-tests }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@692973e3d937129bc
+      - uses: actions/checkout@85e6279cec87321a52edac9c87bce653a07cf6c2
 
